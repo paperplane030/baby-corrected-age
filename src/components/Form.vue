@@ -125,9 +125,9 @@ import moment from 'moment';
 const form = reactive({
   date: '',
   week: 0,
-  days: 0,
+  days: 1,
 });
-const options = [0, 1, 2, 3, 4, 5, 6];
+const options = [1, 2, 3, 4, 5, 6];
 const result = reactive({
   show: false,
   fromBirth: null,
@@ -138,12 +138,13 @@ const result = reactive({
 const submit = () => {
   const today = moment();
   // 結果 1
-  result.fromBirth = today.diff(moment(form.date), 'days');
+  result.fromBirth = today.diff(moment(form.date), 'days') + 1;
   // 結果 2
   const base = form.week * 7 + form.days;
   const fixAge = base + result.fromBirth;
   result.week = Math.floor(fixAge / 7);
-  result.days = fixAge - result.week * 7;
+
+  result.days = fixAge - result.week * 7 == 0 ? 1 : fixAge - result.week * 7;
   // show 彈窗
   result.show = true;
 };
