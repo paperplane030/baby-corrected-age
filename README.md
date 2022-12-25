@@ -11,3 +11,4 @@ git init
 git add .
 git commit -m 'first'
 git push -f 'git@github.com:paperplane030/baby-corrected-age.git' master:gh-pages
+cd..
