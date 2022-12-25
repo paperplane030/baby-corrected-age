@@ -125,9 +125,9 @@ import moment from 'moment';
 const form = reactive({
   date: '',
   week: 0,
-  days: 1,
+  days: 0,
 });
-const options = [1, 2, 3, 4, 5, 6];
+const options = [0, 1, 2, 3, 4, 5, 6];
 const result = reactive({
   show: false,
   fromBirth: null,
