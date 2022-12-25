@@ -30,8 +30,8 @@
                       today-btn
                       v-model="form.date"
                       mask="YYYY/MM/DD"
-                      v-close-popup
-                    />
+                    >
+                    </q-date>
                   </q-popup-proxy>
                 </q-icon>
               </template>
