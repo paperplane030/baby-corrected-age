@@ -1,5 +1,5 @@
 <template>
-  <q-card dark bordered class="bg-grey-3 my-card" style="max-width: 520px">
+  <q-card bordered class="my-card" style="max-width: 520px">
     <q-card-section>
       <div class="text-h6 text-primary">寶寶矯正年齡計算機</div>
     </q-card-section>
@@ -101,12 +101,16 @@
         <div class="text-body1">寶寶今天出生第 {{ result.fromBirth }} 天</div>
         <div class="text-body1 row">
           <div class="col-auto q-mr-md">矯正年齡</div>
-          <span v-if="result.week < 40">
+          <span v-if="!result.isfullMonth">
             {{ result.week }} 週 {{ result.days }} 天
           </span>
           <span v-else>
-            足月 {{ result.week - 40 }} 週 {{ result.days }} 天 <br />
-            足月 {{ (result.week - 40) * 7 + result.days }} 天
+            足月
+            <span v-if="result.fullMonth_year"
+              >{{ result.fullMonth_year }} 歲
+            </span>
+            <span> {{ result.fullMonth_month }} 月 </span>
+            <span> {{ result.fullMonth_days }} 天 </span>
           </span>
         </div>
       </q-card-section>
@@ -130,21 +134,39 @@ const form = reactive({
 const options = [0, 1, 2, 3, 4, 5, 6];
 const result = reactive({
   show: false,
+  isfullMonth: false,
   fromBirth: null,
   week: null,
   days: null,
+  fullMonth_year: null,
+  fullMonth_month: null,
+  fullMonth_days: null,
 });
 
 const submit = () => {
   const today = moment();
   // 結果 1
   result.fromBirth = today.diff(moment(form.date), 'days') + 1;
-  // 結果 2
+  // 今天跟足月日期的關係
   const base = form.week * 7 + form.days;
+  const fullMonthDays = 280 - base;
+  const fullMonthDate = moment(form.date).add(fullMonthDays, 'days');
+  result.isfullMonth = today.isAfter(fullMonthDate);
+  // 結果 2 - 未足月
   const fixAge = base + result.fromBirth;
   result.week = Math.floor(fixAge / 7);
-
   result.days = fixAge - result.week * 7 == 0 ? 1 : fixAge - result.week * 7;
+  // 結果 2 - 足月
+  // 計算兩者差異年數
+  const years = today.diff(fullMonthDate, 'years');
+  // 計算兩者差異月數，這邊要扣掉上面計算的差異年，否則會得到12個月
+  const months = today.diff(fullMonthDate, 'months') - years * 12;
+  // 把差異的年、月數加回來，否則會變成計算起訖日相差的天數(365天)
+  fullMonthDate.add(years, 'years').add(months, 'months');
+  const days = today.diff(fullMonthDate, 'days');
+  result.fullMonth_year = years;
+  result.fullMonth_month = months;
+  result.fullMonth_days = days;
   // show 彈窗
   result.show = true;
 };
