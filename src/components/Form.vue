@@ -115,9 +115,9 @@ import { ref, reactive } from 'vue';
 import moment from 'moment';
 
 const form = reactive({
-  date: '2022/12/15',
-  week: 37,
-  days: 2,
+  date: '',
+  week: 0,
+  days: 0,
 });
 const options = [0, 1, 2, 3, 4, 5, 6];
 const result = reactive({
