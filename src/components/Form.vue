@@ -153,9 +153,9 @@ const submit = () => {
   const fullMonthDate = moment(form.date).add(fullMonthDays, 'days');
   result.isfullMonth = today.isAfter(fullMonthDate);
   // 結果 2 - 未足月
-  const fixAge = base + result.fromBirth;
+  const fixAge = base + result.fromBirth - 1;
   result.week = Math.floor(fixAge / 7);
-  result.days = fixAge - result.week * 7 == 0 ? 1 : fixAge - result.week * 7;
+  result.days = fixAge - result.week * 7;
   // 結果 2 - 足月
   // 計算兩者差異年數
   const years = today.diff(fullMonthDate, 'years');
